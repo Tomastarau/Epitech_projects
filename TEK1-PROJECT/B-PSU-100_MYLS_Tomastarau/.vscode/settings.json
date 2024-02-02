@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "stat.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "cstdint": "c"
+    }
+}

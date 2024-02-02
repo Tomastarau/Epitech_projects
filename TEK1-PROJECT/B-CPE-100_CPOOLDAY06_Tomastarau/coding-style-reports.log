@@ -1,0 +1,15 @@
+./a.out:1: MAJOR:C-O1
+./main.c~:1: MAJOR:C-O1
+./my_strcapitalize.c:25: MINOR:C-G8
+./my_strcapitalize.c~:1: MAJOR:C-O1
+./my_strcmp.c:26: MINOR:C-L4
+./my_strcmp.c:28: MINOR:C-L4
+./my_strcmp.c:33: MINOR:C-G8
+./my_strcmp.c:34: MINOR:C-G8
+./my_strcmp.c:35: MINOR:C-G8
+./my_strcmp.c~:1: MAJOR:C-O1
+./my_strlowcase.c~:1: MAJOR:C-O1
+./my_strncmp.c:21: MINOR:C-G7
+./my_strncmp.c~:1: MAJOR:C-O1
+./my_strupcase.c~:1: MAJOR:C-O1
+./vgcore.16248:1: MAJOR:C-O1

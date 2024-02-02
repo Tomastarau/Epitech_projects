@@ -1,0 +1,18 @@
+/*
+** EPITECH PROJECT, 2022
+** criterion tests
+** File description:
+** task04
+*/
+
+# include <criterion/criterion.h>
+Test(rush3, )
+{
+    char dest[6] = {0};
+    my_strncpy (dest, "HelloWorld", 5);
+    cr_assert_str_eq(dest, "Hello");
+}
+
+Test(my_strncpy, copy_string_in_empty_array)
+{
+ 

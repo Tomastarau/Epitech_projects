@@ -1,0 +1,4 @@
+*.o
+coding-style-reports.log
+.vscode*
+*libmy.a

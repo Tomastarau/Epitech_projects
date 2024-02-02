@@ -1,0 +1,78 @@
+/*
+** EPITECH PROJECT, 2023
+** ginger algo
+** File description:
+** ginger algo
+*/
+
+static int ginger_position(ginger_t *ginger_stats, coords_t *coord, int x, int y)
+{
+    if (!ginger_stats->map){
+        exit 84;
+    }
+    for (int x = 0; ginger_stats->map[y][x] != '\0'; x++){
+        if (ginger_stats->map[y][x] == 'G'){
+            coord->x = x;
+            coord->y = y;
+            return 0;
+        }
+    }
+    return 1;
+}
+
+static int ginger_scan_near(ginger_t *ginger_stats, coords_t *coord_g, \
+int i_x, int i_y)
+{
+    if (!ginger_stats->map) {
+        exit(84);
+    }
+    if (ginger_stats->map[coord_g->y + i_y][coord_g->x + i_x] != '.' \
+ginger_stats->map[coord_g->y + i_y][coord->g + i_x] != 'G'){
+        ginger_stats->map[coord_g->y + i_y][coord_g->x + i_x] = 'G';
+        ginger_stats->map[coord_g->y][coord_g->x] = '.';
+        coord->y = coord->y + i_y;
+        coord->x = coord->x + i_x;
+        print_map();
+    }
+}
+
+int ginger_algo(ginger_t *ginger_stats, coords_t *coord)
+{
+    if (!ginger_stats->map){
+        exit(84);
+    }
+    for (int y = 0; ginger_stats->map[y] != NULL; y++){
+        ginger_position(ginger_stats, coord, x, y);
+    }
+    for (int i_y = -1; i_y != 2; i_y++){
+        for (int i_x = -1; i_x != 2; i_x++){
+            ginger_scan_near(ginger_stats, coord_g, i_x, i_y);
+        }
+    }
+}
+
+int tokens_number(ginger_stats, coord, x, y)
+{
+    if (!ginger_stats->map) {
+        exit 84;
+    }
+    for (int x = 0; ginger_stats->map[y][x] != '\0'; x++){
+        if (ginger_stats->map[y][x] == 'T'){
+            ginger_stats->total_token++;
+        }
+    }
+    return 1;
+}
+
+int retrieve_token_number(ginger_t *ginger_stats)
+{
+    if (!ginger_stats->map) {
+        exit(84);
+    }
+    for (int y = 0; ginger_stats->map[y] != NULL; y++){
+        tokens_(ginger_stats, coord, x, y);
+    }
+    return 0;
+}
+n 0;
+}

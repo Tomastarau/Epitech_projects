@@ -1,0 +1,295 @@
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD11-tom.bouisset
+** File description:
+** DirectoryLister
+*/
+
+#include "DirectoryLister.hpp"
+
+DirectoryLister::DirectoryLister(const std::string &path, bool hidden)
+    : _path(path), _hidden(hidden), _dirStream(nullptr) {
+    open(path, hidden);
+}
+
+DirectoryLister::DirectoryLister() : _hidden(false), _dirStream(nullptr) {}
+
+DirectoryLister::~DirectoryLister() {
+    if (_dirStream) {
+        closedir(_dirStream);
+    }
+}
+
+bool DirectoryLister::open(const std::string &path, bool hidden) {
+    if (_dirStream) {
+        closedir(_dirStream);
+    }
+    _dirStream = opendir(path.c_str());
+    _hidden = hidden;
+    if (!_dirStream) {
+        perror(path.c_str());
+        return false;
+    }
+    return true;
+}
+
+std::string DirectoryLister::get() {
+    if (!_dirStream) return "";
+    struct dirent *entry;
+    while ((entry = readdir(_dirStream)) != nullptr) {
+        std::string filename = entry->d_name;
+        if (!_hidden && filename[0] == '.')
+            continue;
+        return filename;
+    }
+    return "";
+}/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD11-tom.bouisset
+** File description:
+** IDirectoryLister
+*/
+
+#include "IDirectoryLister.hpp"
+
+IDirectoryLister::IDirectoryLister()
+{
+}
+
+IDirectoryLister::~IDirectoryLister()
+{
+}
+
+IDirectoryLister::OpenFailureException::OpenFailureException(const std::string& msg) 
+    : _message(msg) {
+}
+
+const char* IDirectoryLister::OpenFailureException::what() const noexcept {
+    return _message.c_str();
+}
+
+const char* IDirectoryLister::NoMoreFileException::what() const noexcept {
+    return "End of stream";
+}
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD11-tom.bouisset
+** File description:
+** main
+*/
+
+#include "DirectoryLister.hpp"
+#include <iostream>
+#include <cassert>
+#include <vector>
+
+int main() {
+    // Test with a valid directory
+    {
+        std::cout << "Test: Valid directory, listing visible files\n";
+        DirectoryLister dl("test", false);
+        for (std::string file = dl.get(); !file.empty(); file = dl.get()) {
+            std::cout << file << std::endl;
+        }
+    }
+
+    // Test with a valid directory, including hidden files
+    {
+        std::cout << "\nTest: Valid directory, including hidden files\n";
+        DirectoryLister dl("test", true);
+        for (std::string file = dl.get(); !file.empty(); file = dl.get()) {
+            std::cout << file << std::endl;
+        }
+    }
+
+    // Test with an invalid directory
+    {
+        std::cout << "\nTest: Invalid directory\n";
+        DirectoryLister dl("non_existent_directory", false);
+        assert(dl.open("non_existent_directory", false) == false);
+    }
+
+    // Test re-opening a directory
+    {
+        std::cout << "\nTest: Re-opening another directory\n";
+        DirectoryLister dl("test", false);
+        assert(dl.open("test/subdirectory", false) == true);
+        for (std::string file = dl.get(); !file.empty(); file = dl.get()) {
+            std::cout << file << std::endl;
+        }
+    }
+
+    // Test with empty directory path
+    {
+        std::cout << "\nTest: Empty directory path\n";
+        DirectoryLister dl("", false);
+        assert(dl.open("", false) == false);
+    }
+
+    // Test with a vector of various directory paths
+    std::vector<std::string> paths = {"test", "test/subdirectory", "non_existent_directory"};
+    for (const auto& path : paths) {
+        std::cout << "\nTesting path: " << path << "\n";
+        DirectoryLister dl(path, false);
+        for (std::string file = dl.get(); !file.empty(); file = dl.get()) {
+            std::cout << file << std::endl;
+        }
+    }
+
+    std::cout << "\nAll tests completed successfully.\n";
+    return 0;
+}
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD11-tom.bouisset
+** File description:
+** SafeDirectoryLister
+*/
+
+#include "SafeDirectoryLister.hpp"
+
+SafeDirectoryLister::SafeDirectoryLister() : _hidden(false), _dirStream(nullptr) {}
+
+SafeDirectoryLister::SafeDirectoryLister(const std::string& path, bool hidden) : _path(path), _hidden(hidden), _dirStream(nullptr) {
+    open(path, hidden);
+}
+
+SafeDirectoryLister::~SafeDirectoryLister() {
+    closeDirectory();
+}
+
+bool SafeDirectoryLister::open(const std::string& path, bool hidden) {
+    closeDirectory();
+    _dirStream = opendir(path.c_str());
+    _hidden = hidden;
+
+    if (!_dirStream) {
+        throw IDirectoryLister::OpenFailureException();
+    }
+
+    return true;
+}
+
+std::string SafeDirectoryLister::get() {
+    if (!_dirStream) {
+        return "";
+    }
+
+    struct dirent* entry;
+
+    while ((entry = readdir(_dirStream)) != nullptr) {
+        std::string filename = entry->d_name;
+
+        if (!_hidden && filename[0] == '.') {
+            continue;
+        }
+
+        return filename;
+    }
+
+    throw IDirectoryLister::NoMoreFileException();
+}
+
+void SafeDirectoryLister::closeDirectory() {
+    if (_dirStream) {
+        closedir(_dirStream);
+        _dirStream = nullptr;
+    }
+}/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD11-tom.bouisset
+** File description:
+** DirectoryLister
+*/
+
+#ifndef DIRECTORYLISTER_HPP_
+#define DIRECTORYLISTER_HPP_
+
+#include "IDirectoryLister.hpp"
+
+class DirectoryLister : public IDirectoryLister {
+    public:
+        DirectoryLister();
+        DirectoryLister(const std::string &path, bool hidden);
+        DirectoryLister(const DirectoryLister&) = delete;
+        DirectoryLister& operator=(const DirectoryLister&) = delete;
+        ~DirectoryLister();
+        bool open(const std::string &path, bool hidden) override;
+        std::string get() override;
+
+    private:
+        std::string _path;
+        bool _hidden;
+        DIR* _dirStream;
+        void closeDirectory();
+};
+
+#endif /* !DIRECTORYLISTER_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD11-tom.bouisset
+** File description:
+** IDirectoryLister
+*/
+
+#ifndef IDIRECTORYLISTER_HPP_
+#define IDIRECTORYLISTER_HPP_
+
+#include <string>
+#include <iostream>
+#include <dirent.h>
+
+class IDirectoryLister {
+public:
+    virtual ~IDirectoryLister() {}
+
+    virtual bool open(const std::string& path, bool hidden) = 0;
+    virtual std::string get() = 0;
+
+    class OpenFailureException : public std::exception {
+    private:
+        std::string _message;
+    public:
+        OpenFailureException(const std::string& msg);
+        virtual const char* what() const noexcept override;
+    };
+
+    class NoMoreFileException : public std::exception {
+    public:
+        virtual const char* what() const noexcept override;
+    };
+};
+
+#endif /* !IDIRECTORYLISTER_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD11-tom.bouisset
+** File description:
+** SafeDirectoryLister
+*/
+
+#ifndef SAFEDIRECTORYLISTER_HPP_
+#define SAFEDIRECTORYLISTER_HPP_
+
+#include "IDirectoryLister.hpp"
+
+class SafeDirectoryLister : public IDirectoryLister {
+    public:
+        SafeDirectoryLister();
+        SafeDirectoryLister(const std::string& path, bool hidden);
+        SafeDirectoryLister(const SafeDirectoryLister&) = delete;
+        SafeDirectoryLister& operator=(const SafeDirectoryLister&) = delete;
+        ~SafeDirectoryLister();
+
+        bool open(const std::string& path, bool hidden) override;
+        std::string get() override;
+
+    private:
+        std::string _path;
+        bool _hidden;
+        DIR* _dirStream;
+        void closeDirectory();
+};
+
+
+#endif /* !SAFEDIRECTORYLISTER_HPP_ */

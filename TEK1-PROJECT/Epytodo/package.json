@@ -1,0 +1,15 @@
+{
+  "name": "epytodo",
+  "version": "1.0.0",
+  "description": "Epytodo project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tom",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  }
+}

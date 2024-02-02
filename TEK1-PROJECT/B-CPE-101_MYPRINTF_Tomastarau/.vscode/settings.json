@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "printf.h": "c",
+        "functional": "c",
+        "include": "c",
+        "stdio.h": "c",
+        "unistd.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
+}

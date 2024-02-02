@@ -1,0 +1,548 @@
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** ABerry
+*/
+
+#include "ABerry.hpp"
+
+ABerry::ABerry(const std::string &name, unsigned int vitamins)
+    : AFruit(name, vitamins)
+{
+    _isPeeled = true;
+}
+
+ABerry::~ABerry()
+{
+}
+
+bool ABerry::isPeeled() const {
+    return _isPeeled;
+}
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** ACitrus
+*/
+
+#include "ACitrus.hpp"
+
+ACitrus::ACitrus(const std::string &name, unsigned int vitamins)
+    : AFruit(name, vitamins) {}
+
+ACitrus::~ACitrus() {}
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** AFruit
+*/
+
+#include "AFruit.hpp"
+
+AFruit::AFruit(const std::string &name, unsigned int vitamins)
+    : _name(name), _vitamins(vitamins), _isPeeled(false) {}
+
+AFruit::~AFruit() {}
+
+unsigned int AFruit::getVitamins() const {
+    return _isPeeled ? _vitamins : 0;
+}
+
+std::string AFruit::getName() const {
+    return _name;
+}
+
+bool AFruit::isPeeled() const {
+    return _isPeeled;
+}
+
+void AFruit::peel() {
+    _isPeeled = true;
+}
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** Almond
+*/
+
+#include "Almond.hpp"
+
+Almond::Almond(const std::string &name, unsigned int vitamins)
+    : ANut(name, vitamins)
+{
+}
+
+Almond::~Almond()
+{
+}
+
+std::ostream& Almond::print(std::ostream& os) const {
+    os << "[name: \"" << getName() << "\", vitamins: " << getVitamins() << ", peeled: " << (isPeeled() ? "true" : "false") << "]";
+    return os;
+}/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** ANut
+*/
+
+#include "ANut.hpp"
+#include "IFruit.hpp"
+#include "Orange.hpp"
+#include "Strawberry.hpp"
+#include "Almond.hpp"
+
+ANut::ANut(const std::string &name, unsigned int vitamins)
+    : AFruit(name, vitamins) {}
+
+ANut::~ANut()
+{
+}
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** FruitBox
+*/
+
+#include "FruitBox.hpp"
+
+FruitBox::FruitBox(unsigned int size) : size(size), count(0) {
+    fruits = new IFruit*[size];
+    for (unsigned int i = 0; i < size; ++i) {
+        fruits[i] = nullptr;
+    }
+}
+
+FruitBox::~FruitBox() {
+    for (unsigned int i = 0; i < count; ++i) {
+        delete fruits[i];
+    }
+    delete[] fruits;
+}
+
+unsigned int FruitBox::getSize() const {
+    return size;
+}
+
+unsigned int FruitBox::nbFruits() const {
+    return count;
+}
+
+bool FruitBox::pushFruit(IFruit* fruit) {
+    if (count >= size || fruit == nullptr) {
+        return false;
+    }
+
+    for (unsigned int i = 0; i < count; ++i) {
+        if (fruits[i] == fruit) {
+            return false;
+        }
+    }
+
+    fruits[count++] = fruit;
+    return true;
+}
+
+IFruit* FruitBox::popFruit() {
+    if (count == 0) {
+        return nullptr;
+    }
+
+    IFruit* poppedFruit = fruits[0];
+    for (unsigned int i = 1; i < count; ++i) {
+        fruits[i - 1] = fruits[i];
+    }
+    fruits[--count] = nullptr;
+
+    return poppedFruit;
+}
+
+std::ostream& FruitBox::print(std::ostream& os) const {
+    os << "[";
+    for (unsigned int i = 0; i < count; ++i) {
+        os << "[" << fruits[i]->getName() << "]";
+        if (i < count - 1) {
+            os << ", ";
+        }
+    }
+    os << "]";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const FruitBox& box) {
+    return box.print(os);
+}
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** IFruit
+*/
+
+#include "IFruit.hpp"
+
+
+IFruit::~IFruit()
+{
+}
+
+unsigned int IFruit::getVitamins() const {
+    return 0;
+}
+
+std::string IFruit::getName() const {
+    return "";
+}
+
+bool IFruit::isPeeled() const {
+    return false;
+}
+
+void IFruit::peel() {
+
+}
+
+std::ostream& IFruit::print(std::ostream& os) const {
+    os << "IFruit: Default print";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const IFruit& fruit) {
+    return fruit.print(os);
+}/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** Lemon
+*/
+
+#include "Lemon.hpp"
+
+Lemon::Lemon(const std::string &name, unsigned int vitamins)
+    : ACitrus(name, vitamins)
+{
+}
+
+Lemon::~Lemon()
+{
+}
+
+std::ostream& Lemon::print(std::ostream& os) const {
+    os << "[name: \"" << getName() << "\", vitamins: " << getVitamins() << ", peeled: " << (isPeeled() ? "true" : "false") << "]";
+    return os;
+}/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** main
+*/
+#include <iostream>
+#include "IFruit.hpp"
+#include "AFruit.hpp"
+#include "ACitrus.hpp"
+#include "ABerry.hpp"
+#include "ANut.hpp"
+#include "Lemon.hpp"
+#include "Orange.hpp"
+#include "Strawberry.hpp"
+#include "Almond.hpp"
+
+int main() {
+    // Creating instances of different fruits
+    Orange o("Marvin", 21);
+    Strawberry s("Marvin", 42);
+    AFruit* af = new AFruit("Marvin", 33);
+    ABerry* ab = new ABerry("Marvin", 34);
+    ACitrus* ac = new ACitrus("Marvin", 35);
+    ANut* an = new ANut("Marvin", 36);
+
+    // Printing details of the fruits
+    std::cout << o << std::endl;
+    std::cout << "getVitamins: " << o.getVitamins() << std::endl;
+    std::cout << "getName: " << o.getName() << std::endl;
+    std::cout << "isPeeled: " << std::boolalpha << o.isPeeled() << std::endl;
+
+    std::cout << s << std::endl;
+    std::cout << "getVitamins: " << s.getVitamins() << std::endl;
+    std::cout << "getName: " << s.getName() << std::endl;
+    std::cout << "isPeeled: " << std::boolalpha << s.isPeeled() << std::endl;
+
+    std::cout << "AFruit: " << std::boolalpha << af->isPeeled() << std::endl;
+    std::cout << "ABerry: " << std::boolalpha << ab->isPeeled() << std::endl;
+    std::cout << "ACitrus: " << std::boolalpha << ac->isPeeled() << std::endl;
+    std::cout << "ANut: " << std::boolalpha << an->isPeeled() << std::endl;
+
+    // Clean up
+    delete af;
+    delete ab;
+    delete ac;
+    delete an;
+
+    return 0;
+}
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** Orange
+*/
+
+#include "Orange.hpp"
+
+Orange::Orange(const std::string &name, unsigned int vitamins)
+    : ACitrus(name, vitamins) {}
+
+Orange::~Orange()
+{
+}
+
+std::ostream& Orange::print(std::ostream& os) const {
+    os << "[name: \"" << getName() << "\", vitamins: " << getVitamins() << ", peeled: " << (isPeeled() ? "true" : "false") << "]";
+    return os;
+}/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** Strawberry
+*/
+
+#include "Strawberry.hpp"
+
+Strawberry::Strawberry(const std::string &name, unsigned int vitamins)
+    :   ABerry(name, vitamins) {}
+
+Strawberry::~Strawberry()
+{
+}
+
+std::ostream& Strawberry::print(std::ostream& os) const {
+    os << "[name: \"" << getName() << "\", vitamins: " << getVitamins() << ", peeled: " << (isPeeled() ? "true" : "false") << "]";
+    return os;
+}/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** ABerry
+*/
+
+#ifndef ABERRY_HPP_
+#define ABERRY_HPP_
+
+#include "AFruit.hpp"
+
+class ABerry : public AFruit{
+    public:
+        ABerry(const std::string &name, unsigned int vitamins);
+        ~ABerry();
+        bool isPeeled() const override;
+};
+
+#endif /* !ABERRY_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** ACitrus
+*/
+
+#ifndef ACITRUS_HPP_
+#define ACITRUS_HPP_
+
+#include "AFruit.hpp"
+
+class ACitrus : public AFruit{
+    public:
+        ACitrus(const std::string &name, unsigned int vitamins);
+        ~ACitrus();
+};
+
+#endif /* !ACITRUS_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** AFruit
+*/
+
+#ifndef AFRUIT_HPP_
+#define AFRUIT_HPP_
+
+#include "IFruit.hpp"
+
+class AFruit : public IFruit{
+    public:
+        AFruit(const std::string &name, unsigned int vitamins);
+        ~AFruit();
+        unsigned int getVitamins() const override;
+        std::string getName() const override;
+        bool isPeeled() const override;
+        void peel() override;
+    protected:
+        std::string _name;
+        unsigned int _vitamins;
+        bool _isPeeled;
+};
+
+#endif /* !AFRUIT_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** Almond
+*/
+
+#ifndef ALMOND_HPP_
+#define ALMOND_HPP_
+
+#include "ANut.hpp"
+
+class Almond : public ANut{
+    public:
+        Almond(const std::string &name = "almond", unsigned int vitamins = 2);
+        ~Almond();
+        std::ostream& print(std::ostream& os) const override;
+};
+
+#endif /* !ALMOND_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** ANut
+*/
+
+#ifndef ANUT_HPP_
+#define ANUT_HPP_
+
+#include "AFruit.hpp"
+
+class ANut : public AFruit{
+    public:
+        ANut(const std::string &name, unsigned int vitamins);
+        ~ANut();
+};
+
+#endif /* !ANUT_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** FruitBox
+*/
+
+#ifndef FRUITBOX_HPP_
+#define FRUITBOX_HPP_
+
+#include "IFruit.hpp"
+
+class FruitBox {
+    public:
+        FruitBox(unsigned int size);
+        ~FruitBox();
+        unsigned int getSize() const;
+        unsigned int nbFruits() const;
+        bool pushFruit(IFruit* fruit);
+        IFruit* popFruit();
+        std::ostream& print(std::ostream& os) const;
+
+    private:
+        unsigned int size;
+        unsigned int count;
+        IFruit** fruits;
+};
+
+std::ostream& operator<<(std::ostream& os, const FruitBox& box);
+
+#endif /* !FRUITBOX_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** IFruit
+*/
+
+#ifndef IFRUIT_HPP_
+#define IFRUIT_HPP_
+
+#include <string>
+#include <iostream>
+
+class IFruit {
+    public:
+        virtual ~IFruit() = default;
+        virtual unsigned int getVitamins() const = 0;
+        virtual std::string getName() const = 0;
+        virtual bool isPeeled() const = 0;
+        virtual void peel() = 0;
+        virtual std::ostream& print(std::ostream& os) const = 0;
+};
+
+std::ostream& operator<<(std::ostream& os, const IFruit& fruit);
+
+#endif /* !IFRUIT_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** Lemon
+*/
+
+#ifndef LEMON_HPP_
+#define LEMON_HPP_
+
+#include "ACitrus.hpp"
+
+class Lemon : public ACitrus{
+    public:
+        Lemon(const std::string &name = "lemon", unsigned int vitamins = 4);
+        ~Lemon();
+        std::ostream& print(std::ostream& os) const override;
+
+};
+
+#endif /* !LEMON_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** Orange
+*/
+
+#ifndef ORANGE_HPP_
+#define ORANGE_HPP_
+
+#include "ACitrus.hpp"
+
+class Orange : public ACitrus {
+    public:
+        Orange(const std::string &name = "orange", unsigned int vitamins = 7);
+        ~Orange();
+        std::ostream& print(std::ostream& os) const override;
+};
+
+#endif /* !ORANGE_HPP_ */
+/*
+** EPITECH PROJECT, 2024
+** B-PDG-300-BDX-3-1-PDGD10-tom.bouisset
+** File description:
+** Strawberry
+*/
+
+#ifndef STRAWBERRY_HPP_
+#define STRAWBERRY_HPP_
+
+#include "ABerry.hpp"
+
+class Strawberry : public ABerry {
+    public:
+        Strawberry(const std::string &name = "strawberry", unsigned int vitamins = 6);
+        ~Strawberry();
+        std::ostream& print(std::ostream& os) const override;
+};
+
+#endif /* !STRAWBERRY_HPP_ */

@@ -1,0 +1,12 @@
+*.o
+*.a
+.vscode
+main.c
+
+coding-style*
+vgcore*
+unit-test*
+a.out
+
+tmp
+ex0*

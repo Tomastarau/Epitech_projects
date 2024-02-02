@@ -1,0 +1,5 @@
+./a.out:1: MAJOR:C-O1
+./main.c:21: INFO:C-A3
+./step1.c:37: MAJOR:C-F4
+./vgcore.12291:1: MAJOR:C-O1
+./vgcore.12438:1: MAJOR:C-O1

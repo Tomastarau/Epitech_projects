@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Concatenate all .cpp and .hpp files
+cat *.cpp *.hpp > combined.txt

@@ -1,0 +1,2 @@
+./Makefile:69: illegal token in column 19, giving up (hint: fix the file or remove it from the working set)
+./src/find_biggest_square.c:52: MAJOR:C-C1

@@ -1,0 +1,23 @@
+/*
+** EPITECH PROJECT, 2023
+** main
+** File description:
+** main
+*/
+
+#include <stdlib.h>
+#include <unistd.h>
+#include "my.h"
+#include "stumper.h"
+
+int main(int argc, const char* argv[])
+{
+    if (argc == 4) {
+        if (write(1, argv[1], my_strlen(argv[1])) == -1) {
+            return 84;
+        }
+    }
+    if (arg_joiner(argv) == 84 || ) {
+        return 84;
+    }
+}

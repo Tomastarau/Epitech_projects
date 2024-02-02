@@ -1,0 +1,11 @@
+./include/swap.h:9: MINOR:C-G3
+./my_printf/struct.c:51: INFO:C-A3
+./push_swap_bootstrap/Makefile:1: MINOR:C-G1
+./push_swap_bootstrap/graphic_push_swap.o:1: MAJOR:C-O1
+./push_swap_bootstrap/pimp_my_algo.h:1: MINOR:C-G1
+./push_swap_bootstrap/pimp_my_algo.h:2: MINOR:C-G3
+./push_swap_bootstrap/pimp_my_algo.h:4: MINOR:C-G3
+./push_swap_bootstrap/push_swap_bootstrap.o:1: MAJOR:C-O1
+./push_swap_bootstrap/sort_numbers.c:1: MINOR:C-G1
+./push_swap_bootstrap/sort_numbers.o:1: MAJOR:C-O1
+./src/a.out:1: MAJOR:C-O1

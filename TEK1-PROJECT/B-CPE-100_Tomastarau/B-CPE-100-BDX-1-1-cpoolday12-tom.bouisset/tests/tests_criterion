@@ -1,0 +1,9 @@
+/*
+** EPITECH PROJECT, 2022
+** criterion tests
+** File description:
+** task04
+*/
+
+# include <criterion/criterion.h>
+Test(

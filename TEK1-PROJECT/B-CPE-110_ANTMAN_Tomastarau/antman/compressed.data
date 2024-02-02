@@ -1,0 +1,41 @@
+makefile $(NAME) $(OBJ) fclean clean all
+##
+## EPITECH PROJECT, 2022
+## @~
+## File description:
+## @~
+##
+
+NAME	=	antman
+
+SRC = 	my_antman.c				\
+		main.c    				\
+		src/texte_compression/algorithm_functions.c		\
+		src/texte_compression/array_management.c 		\
+		src/texte_compression/print_functions.c			\
+		src/image_compression/image_compression.c 		\
+		src/image_compression/file_to_str.c
+
+OBJ = $(SRC:.c=.o)
+
+LDFLAGS = -L ../lib/ -lmy
+
+CFLAGS = -Wall -Wextra -I include
+
+all: @&
+
+make_libs:
+	make -C ../lib/my
+
+$(NAME):  $(make_lib) @@
+	gcc -o @& @@ $(LDFLAGS)
+
+clean:
+	rm -f @@
+
+@` : øø
+	rm -f @&
+
+re: @` øµ
+
+.PHONY: øø @` øµ re make_libs

@@ -1,0 +1,82 @@
+name: Chocolatine
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  MIRROR_URL: git@github.com:EpitechPromo2027/B-DOP-200-BDX-2-1-chocolatine-tom.bouisset.git
+  EXECUTABLES: pushswap,antman/antman,giantman/giantman,mysh,bsq
+
+jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/epitech/coding-style-checker:latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run coding style checker
+      id: check_coding_style_output
+      run: |
+        check.sh $(pwd) $(pwd) 2>&1 | tee coding_style_reports.log
+        echo "::set-output name=number_of_errors::$(grep -c 'Error' coding_style_reports.log)"
+        cat coding_style_reports.log | awk -F: '/Error/ { print "::error file=" $1 ",line=" $2 ",col=" $3 "::" $4 }'
+
+    - name: Fail if there are any coding style errors
+      if: steps.check_coding_style_output.outputs.number_of_errors > 0
+      run: exit 1
+
+  check_program_compilation:
+    runs-on: ubuntu-latest
+    container:
+      image: epitechcontent/epitest-docker
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run make command with 2 minutes timeout
+      run: timeout 2m make
+
+    - name: Run make clean
+      run: make clean
+
+    - name: Check executables
+      run: |
+        for executable in ${EXECUTABLES//,/ }; do
+          if [[ ! -x "$executable" ]]; then
+            echo "$executable not found or not executable"
+            exit 1
+          else
+            echo "$executable is found and executable"
+          fi
+        done
+
+  run_tests:
+    runs-on: ubuntu-latest
+    container:
+      image: epitechcontent/epitest-docker
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run tests with 2 minutes timeout
+      run: timeout 2m make tests_run
+
+  push_to_mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url:
+            ${{ env.MIRROR_URL }}
+          ssh_private_key:
+            ${{ secrets.GIT_SSH_PRIVATE_KEY }}

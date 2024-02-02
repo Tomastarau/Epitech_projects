@@ -1,0 +1,13 @@
+##
+## EPITECH PROJECT, 2022
+## makefile
+## File description:
+## makefile
+##
+
+$(NAME): $(LIB) $(OBJ)
+		// ligne de compilation
+$(LIB):
+	make -C lib/my
+
+/* la commande make -C permet d'appeler la commande make d'un autre makefile que celui dans lequel on est */
